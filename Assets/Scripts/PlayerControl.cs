@@ -11,6 +11,7 @@ public class PlayerControl : MonoBehaviour
     [SerializeField] int numberOfJumps;
     CaptainInput captainInput;
     Rigidbody2D playerRB;
+    BoxCollider2D playerFeet;
     Vector2 moveInput;
     Animator playerAnim;
     bool jumpButtonHold;
@@ -23,6 +24,7 @@ public class PlayerControl : MonoBehaviour
     {
         playerRB = GetComponent<Rigidbody2D>();
         playerAnim = GetComponent<Animator>();
+        playerFeet = GetComponent<BoxCollider2D>();
         captainInput = new CaptainInput();
         MovementInput();
         captainInput.Player.Jump.performed += Jump_performed;
@@ -61,6 +63,23 @@ public class PlayerControl : MonoBehaviour
         Move();
         Jump();
         FlipSprite();
+        AnimationControl();
+    }
+
+    private void AnimationControl()
+    {
+        if (playerFeet.IsTouchingLayers(LayerMask.GetMask("Ground")))
+        {
+            playerAnim.SetBool("isFalling", false);
+            playerAnim.SetBool("onGround", true);
+            
+            jumpTimes = 0;
+        }
+        if (playerRB.velocity.y < 0)
+        {
+            playerAnim.SetBool("isFalling", true);
+            playerAnim.SetBool("isJumping", false);
+        }
     }
 
     private void Jump()
@@ -71,7 +90,10 @@ public class PlayerControl : MonoBehaviour
             timeHoldJump += Time.fixedDeltaTime;
             Vector2 jumper = new Vector2(playerRB.velocity.x, minJump + varJump * timeHoldJump);
             playerRB.velocity = jumper;
+            playerAnim.SetBool("isJumping", true);
+            playerAnim.SetBool("onGround", false);
         }
+        
     }
 
     private void MovementInput()
@@ -95,23 +117,5 @@ public class PlayerControl : MonoBehaviour
            transform.localScale = new Vector3(Mathf.Sign(playerRB.velocity.x), transform.localScale.y, transform.localScale.z);
         }
     }
-
-    
-    #region Air and Ground Check
-    private void OnCollisionExit2D(Collision2D other)
-    {
-        if(other.gameObject.tag == "Ground")
-        {
-            onAir = true;
-        }
-    }
-    private void OnCollisionEnter2D(Collision2D other)
-    {
-        if (other.gameObject.tag == "Ground")
-        {
-            onAir = false;
-            jumpTimes = 0;
-        }
-    }
-    #endregion
+   
 }
