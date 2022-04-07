@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEditor;
 
 public class PlayerControl : MonoBehaviour
 {
+    [Header ("Move and Jump")]
     [SerializeField] float moveSpeed;
-    [SerializeField] float holdForce;
     [SerializeField] float minJump, varJump;
-    [SerializeField] int numberOfJumps;
+    [SerializeField] int numberOfJumps = 1;
     CaptainInput captainInput;
     Rigidbody2D playerRB;
     BoxCollider2D playerFeet;
@@ -19,6 +20,9 @@ public class PlayerControl : MonoBehaviour
     float timeHoldJump = 0;
     float maxHoldTime = 0.5f;
     int jumpTimes = 0;
+    [Header("Attack")]
+    [SerializeField] Transform attackPoint;
+    [SerializeField] float attackRange = 1f;
 
     private void Awake()
     {
@@ -29,6 +33,8 @@ public class PlayerControl : MonoBehaviour
         MovementInput();
         captainInput.Player.Jump.performed += Jump_performed;
         captainInput.Player.Jump.canceled += Jump_canceled;
+        captainInput.Player.Attack.performed += Attack_performed;
+        
     }
 
     private void Jump_canceled(InputAction.CallbackContext obj)
@@ -38,12 +44,12 @@ public class PlayerControl : MonoBehaviour
 
     private void Jump_performed(InputAction.CallbackContext obj)
     {
-        if(jumpTimes < numberOfJumps)
+        jumpTimes++;
+        if (jumpTimes <= numberOfJumps)
         {
             jumpButtonHold = true;
             timeHoldJump = 0f;
-        }        
-        jumpTimes++;
+        }
     }
 
     
@@ -62,7 +68,6 @@ public class PlayerControl : MonoBehaviour
     {
         Move();
         Jump();
-        FlipSprite();
         AnimationControl();
     }
 
@@ -70,32 +75,31 @@ public class PlayerControl : MonoBehaviour
     {
         if (playerFeet.IsTouchingLayers(LayerMask.GetMask("Ground")))
         {
-            playerAnim.SetBool("isFalling", false);
+            playerAnim.ResetTrigger("isFalling");
             playerAnim.SetBool("onGround", true);
-            
             jumpTimes = 0;
         }
         if (playerRB.velocity.y < 0)
         {
-            playerAnim.SetBool("isFalling", true);
-            playerAnim.SetBool("isJumping", false);
+            playerAnim.SetTrigger("isFalling");
+            playerAnim.ResetTrigger("isJumping");
         }
     }
 
     private void Jump()
     {
-        if (jumpButtonHold && timeHoldJump < maxHoldTime && Mathf.Abs(playerRB.velocity.y) > 0)
+        if (jumpButtonHold && timeHoldJump < maxHoldTime)
         {
-            timeHoldJump = Mathf.Clamp(timeHoldJump, 0, 1);
+            playerAnim.ResetTrigger("isFalling");
+            timeHoldJump = Mathf.Clamp(timeHoldJump, 0, maxHoldTime);
             timeHoldJump += Time.fixedDeltaTime;
             Vector2 jumper = new Vector2(playerRB.velocity.x, minJump + varJump * timeHoldJump);
             playerRB.velocity = jumper;
-            playerAnim.SetBool("isJumping", true);
+            playerAnim.SetTrigger("isJumping");
             playerAnim.SetBool("onGround", false);
         }
-        
     }
-
+    #region Move
     private void MovementInput()
     {
         captainInput.Player.Move.performed += context => moveInput = context.ReadValue<Vector2>();
@@ -108,14 +112,24 @@ public class PlayerControl : MonoBehaviour
         playerRB.velocity = playerVelocity;
         bool playerHasHorizontalMovement = Mathf.Abs(playerRB.velocity.x) > Mathf.Epsilon;
         playerAnim.SetBool("isRunning", playerHasHorizontalMovement);
-    }
-    void FlipSprite()
-    {
-        bool playerHasHorizontalMovement = Mathf.Abs(playerRB.velocity.x) > Mathf.Epsilon;
         if (playerHasHorizontalMovement)
         {
-           transform.localScale = new Vector3(Mathf.Sign(playerRB.velocity.x), transform.localScale.y, transform.localScale.z);
+            transform.localScale = new Vector3(Mathf.Sign(playerRB.velocity.x), transform.localScale.y, transform.localScale.z);
         }
     }
-   
+    #endregion
+
+    private void Attack_performed(InputAction.CallbackContext obj)
+    {
+        playerAnim.SetTrigger("Attack1");
+        Collider2D[] damage = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, LayerMask.GetMask("Enemy"));
+        foreach (Collider2D enemy in damage)
+        {
+            Debug.Log("hit");
+        }
+    }
+    private void OnDrawGizmos()
+    {
+        Handles.DrawWireDisc(attackPoint.position, Vector3.forward, attackRange);
+    }
 }
