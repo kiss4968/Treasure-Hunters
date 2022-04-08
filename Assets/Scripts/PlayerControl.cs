@@ -16,13 +16,9 @@ public class PlayerControl : MonoBehaviour
     Vector2 moveInput;
     Animator playerAnim;
     bool jumpButtonHold;
-    bool onAir;
     float timeHoldJump = 0;
     float maxHoldTime = 0.5f;
     int jumpTimes = 0;
-    [Header("Attack")]
-    [SerializeField] Transform attackPoint;
-    [SerializeField] float attackRange = 1f;
 
     private void Awake()
     {
@@ -33,7 +29,6 @@ public class PlayerControl : MonoBehaviour
         MovementInput();
         captainInput.Player.Jump.performed += Jump_performed;
         captainInput.Player.Jump.canceled += Jump_canceled;
-        captainInput.Player.Attack.performed += Attack_performed;
         
     }
 
@@ -119,17 +114,5 @@ public class PlayerControl : MonoBehaviour
     }
     #endregion
 
-    private void Attack_performed(InputAction.CallbackContext obj)
-    {
-        playerAnim.SetTrigger("Attack1");
-        Collider2D[] damage = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, LayerMask.GetMask("Enemy"));
-        foreach (Collider2D enemy in damage)
-        {
-            Debug.Log("hit");
-        }
-    }
-    private void OnDrawGizmos()
-    {
-        Handles.DrawWireDisc(attackPoint.position, Vector3.forward, attackRange);
-    }
+    
 }
