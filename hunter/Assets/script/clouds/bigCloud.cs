@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class bigCloud : MonoBehaviour
+public class BigCloud : MonoBehaviour
 {
     [SerializeField] float speed = 1f;
     [SerializeField] Rigidbody2D rigi;
@@ -22,9 +22,9 @@ public class bigCloud : MonoBehaviour
         rigi.MovePosition(position);
         
     }
-    private void OnTriggerEnter2D(Collider2D collision)
+    public void ResetBigCloud()
     {
         this.transform.position = oldposition;
-        
     }
+
 }
