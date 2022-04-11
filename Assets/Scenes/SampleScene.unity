@@ -326,9 +326,9 @@ GameObject:
   - component: {fileID: 1146480339}
   - component: {fileID: 1146480338}
   - component: {fileID: 1146480337}
-  - component: {fileID: 1146480336}
   - component: {fileID: 1146480335}
   - component: {fileID: 1146480340}
+  - component: {fileID: 1146480336}
   m_Layer: 0
   m_Name: FlyingSword
   m_TagString: Untagged
@@ -355,8 +355,8 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!58 &1146480336
-CircleCollider2D:
+--- !u!61 &1146480336
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -368,9 +368,19 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.15335256, y: -0.14}
+  m_Offset: {x: -0.15907675, y: 0.026962101}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.3333334, y: 1.3333334}
+    newSize: {x: 1.3333334, y: 1.3333334}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
   serializedVersion: 2
-  m_Radius: 0.42130268
+  m_Size: {x: 0.8534063, y: 0.3626951}
+  m_EdgeRadius: 0
 --- !u!50 &1146480337
 Rigidbody2D:
   serializedVersion: 4
@@ -757,6 +767,7 @@ MonoBehaviour:
   minJump: 10
   varJump: 1
   numberOfJumps: 1
+  state: 0
 --- !u!95 &1248135065
 Animator:
   serializedVersion: 3
@@ -803,9 +814,9 @@ GameObject:
   - component: {fileID: 1350165683}
   - component: {fileID: 1350165682}
   - component: {fileID: 1350165681}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Wall
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

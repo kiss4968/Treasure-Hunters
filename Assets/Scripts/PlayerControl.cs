@@ -10,6 +10,7 @@ public class PlayerControl : MonoBehaviour
     [SerializeField] float moveSpeed;
     [SerializeField] float minJump, varJump;
     [SerializeField] int numberOfJumps = 1;
+    [SerializeField] State state = State.Idling;
     CaptainInput captainInput;
     Rigidbody2D playerRB;
     BoxCollider2D playerFeet;
@@ -43,6 +44,7 @@ public class PlayerControl : MonoBehaviour
         if (jumpTimes <= numberOfJumps)
         {
             jumpButtonHold = true;
+            playerAnim.SetBool(State.Jumping.ToString(), true);
             timeHoldJump = 0f;
         }
     }
@@ -64,20 +66,21 @@ public class PlayerControl : MonoBehaviour
         Move();
         Jump();
         AnimationControl();
+        
     }
 
     private void AnimationControl()
     {
         if (playerFeet.IsTouchingLayers(LayerMask.GetMask("Ground")))
         {
-            playerAnim.ResetTrigger("isFalling");
+            playerAnim.ResetTrigger(State.Falling.ToString());
             playerAnim.SetBool("onGround", true);
             jumpTimes = 0;
         }
         if (playerRB.velocity.y < 0)
         {
-            playerAnim.SetTrigger("isFalling");
-            playerAnim.ResetTrigger("isJumping");
+            playerAnim.SetTrigger(State.Falling.ToString());
+            playerAnim.SetBool(State.Jumping.ToString(), false);
         }
     }
 
@@ -85,12 +88,11 @@ public class PlayerControl : MonoBehaviour
     {
         if (jumpButtonHold && timeHoldJump < maxHoldTime)
         {
-            playerAnim.ResetTrigger("isFalling");
+            playerAnim.ResetTrigger(State.Falling.ToString());
             timeHoldJump = Mathf.Clamp(timeHoldJump, 0, maxHoldTime);
             timeHoldJump += Time.fixedDeltaTime;
             Vector2 jumper = new Vector2(playerRB.velocity.x, minJump + varJump * timeHoldJump);
             playerRB.velocity = jumper;
-            playerAnim.SetTrigger("isJumping");
             playerAnim.SetBool("onGround", false);
         }
     }
@@ -106,7 +108,7 @@ public class PlayerControl : MonoBehaviour
         Vector2 playerVelocity = new Vector2(moveInput.x * moveSpeed, playerRB.velocity.y);
         playerRB.velocity = playerVelocity;
         bool playerHasHorizontalMovement = Mathf.Abs(playerRB.velocity.x) > Mathf.Epsilon;
-        playerAnim.SetBool("isRunning", playerHasHorizontalMovement);
+        playerAnim.SetBool(State.Running.ToString(), playerHasHorizontalMovement);
         if (playerHasHorizontalMovement)
         {
             transform.localScale = new Vector3(Mathf.Sign(playerRB.velocity.x), transform.localScale.y, transform.localScale.z);
@@ -114,5 +116,13 @@ public class PlayerControl : MonoBehaviour
     }
     #endregion
 
+    public enum State
+    {
+        Idling,
+        Running,
+        Jumping,
+        Falling,
+        Attacking,
+    }
     
 }
