@@ -7,46 +7,68 @@ public class CloseCombat : MonoBehaviour
 {
     [Header("Attack")]
     [SerializeField] Transform attackPoint;
-    [SerializeField] float attackRange = 1f;
     [SerializeField] GameObject throwPrefabs;
+    Rigidbody2D playerRB;
     Animator playerAnim;
     [SerializeField] float throwDelay;
     bool canThrow = true;
-    bool canReceiveInput = true;
+    [SerializeField] bool canReceiveInput = true;
+    float attackDelay = 0.5f;
+    bool immobilizeMovement;
 
     private void Awake()
     {
-        playerAnim = GetComponent<Animator>();
+        playerAnim = GetComponentInChildren<Animator>();
+        playerRB = GetComponent<Rigidbody2D>();
     }
 
     public void Attack(InputAction.CallbackContext obj)
     {
+        if(!canReceiveInput) { return; }
         if (obj.performed)
         {
-            PerformAttack1();
+            immobilizeMovement = true;
+            canReceiveInput = false;
+            int[] atk = new int[] { 1, 2, 3 };
+            int ran = Random.Range(1, 4);
+            switch (ran)
+            {
+                case 1:
+                    PerformAttack1();
+                    break;
+                case 2:
+                    PerformAttack2();
+                    break;
+                case 3:
+                    PerformAttack3();
+                    break;
+            }
+            canReceiveInput = true;
         }
-        if (!canReceiveInput) return;
-        if (obj.performed)
+        if (obj.canceled)
         {
-            Debug.Log("Get");
-            
-            StartCoroutine(WaitForCombo());
-            PerformAttack2();
+            playerAnim.SetBool("isAttacking", false);
+            immobilizeMovement = false;
         }
+    }
+
+    private void FixedUpdate()
+    {
+        ImmobilizeMovement();
     }
     public void Throw(InputAction.CallbackContext obj)
     {
         if (!canThrow) return;
-        StartCoroutine(ThrowDelay());
+        Coroutine throwDelay = StartCoroutine(ThrowDelay());
         Instantiate(throwPrefabs, attackPoint.position, Quaternion.identity);
     }
-    IEnumerator WaitForCombo()
+
+    IEnumerator AttackDelay()
     {
         canReceiveInput = false;
-        yield return new WaitForSeconds(playerAnim.GetCurrentAnimatorStateInfo(0).length);
+        yield return new WaitForSeconds(attackDelay);
         canReceiveInput = true;
     }
-
     IEnumerator ThrowDelay()
     {
         canThrow = false;
@@ -54,20 +76,35 @@ public class CloseCombat : MonoBehaviour
         canThrow = true;
     }
 
-
     public void PerformAttack1()
     {
-        playerAnim.SetTrigger("Attack1");
+        playerAnim.SetBool("isAttacking",true);
+        playerAnim.SetFloat("Speed", 0f);
     }
 
     public void PerformAttack2()
     {
-        playerAnim.SetTrigger("Attack2");
-        playerAnim.ResetTrigger("Attack1");
+        playerAnim.SetBool("isAttacking", true);
+        playerAnim.SetFloat("Speed", 1f);
     }
     public void PerformAttack3()
     {
-        playerAnim.SetTrigger("Attack3");
-        playerAnim.ResetTrigger("Attack2");
+        playerAnim.SetBool("isAttacking", true);
+        playerAnim.SetFloat("Speed", 2f);
     }
+    void ImmobilizeMovement()
+    {
+        if (!immobilizeMovement) 
+        {
+            playerRB.constraints = RigidbodyConstraints2D.None;
+            playerRB.freezeRotation = true;
+            transform.rotation = Quaternion.identity;
+        }
+        else
+        {
+            playerRB.constraints = RigidbodyConstraints2D.FreezePosition;
+            playerRB.freezeRotation = true;
+        }
+    }
+    
 }

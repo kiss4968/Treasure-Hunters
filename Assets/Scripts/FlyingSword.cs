@@ -5,6 +5,7 @@ using UnityEngine;
 public class FlyingSword : MonoBehaviour
 {
     [SerializeField] float flySpeed;
+    [SerializeField] GameObject player;
     Animator swordAnim;
     Rigidbody2D swordRb;
 
@@ -12,10 +13,12 @@ public class FlyingSword : MonoBehaviour
     {
         swordRb = GetComponent<Rigidbody2D>();
         swordAnim = GetComponent<Animator>();
+        
     }
     void Start()
     {
-        swordRb.velocity = new Vector2(flySpeed, 0);
+        swordRb.velocity = new Vector2(flySpeed * player.transform.localScale.x, 0);
+        transform.localScale = player.transform.localScale;
     }
 
     private void OnCollisionEnter2D(Collision2D other)
@@ -23,6 +26,11 @@ public class FlyingSword : MonoBehaviour
         if(other.gameObject.tag != "Player")
         {
             swordAnim.SetTrigger("hitObject");
+            swordRb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        }
+        if(other.gameObject.tag == "Player")
+        {
+            Destroy(gameObject, 0.5f);
         }
     }
 }

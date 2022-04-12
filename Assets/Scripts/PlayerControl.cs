@@ -19,12 +19,13 @@ public class PlayerControl : MonoBehaviour
     bool jumpButtonHold;
     float timeHoldJump = 0;
     float maxHoldTime = 0.5f;
-    int jumpTimes = 0;
+    [SerializeField] int jumpTimes = 0;
+    public static bool onAir;
 
     private void Awake()
     {
         playerRB = GetComponent<Rigidbody2D>();
-        playerAnim = GetComponent<Animator>();
+        playerAnim = GetComponentInChildren<Animator>();
         playerFeet = GetComponent<BoxCollider2D>();
         captainInput = new CaptainInput();
         MovementInput();
@@ -66,7 +67,6 @@ public class PlayerControl : MonoBehaviour
         Move();
         Jump();
         AnimationControl();
-        
     }
 
     private void AnimationControl()
@@ -75,7 +75,8 @@ public class PlayerControl : MonoBehaviour
         {
             playerAnim.ResetTrigger(State.Falling.ToString());
             playerAnim.SetBool("onGround", true);
-            jumpTimes = 0;
+                jumpTimes = 0;
+            
         }
         if (playerRB.velocity.y < 0)
         {
@@ -124,5 +125,4 @@ public class PlayerControl : MonoBehaviour
         Falling,
         Attacking,
     }
-    
 }
