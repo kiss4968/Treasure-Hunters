@@ -12,21 +12,21 @@ public class PlayerControl : MonoBehaviour
     [SerializeField] int numberOfJumps = 1;
     [SerializeField] State state = State.Idling;
     CaptainInput captainInput;
-    Rigidbody2D playerRB;
-    BoxCollider2D playerFeet;
     Vector2 moveInput;
-    Animator playerAnim;
     bool jumpButtonHold;
     float timeHoldJump = 0;
     float maxHoldTime = 0.5f;
     [SerializeField] int jumpTimes = 0;
     public static bool onAir;
+    [HideInInspector]
+    [SerializeField] Rigidbody2D playerRB;
+    [HideInInspector]
+    [SerializeField] BoxCollider2D playerFeet;
+    [HideInInspector]
+    [SerializeField] Animator playerAnim;
 
     private void Awake()
-    {
-        playerRB = GetComponent<Rigidbody2D>();
-        playerAnim = GetComponentInChildren<Animator>();
-        playerFeet = GetComponent<BoxCollider2D>();
+    {   
         captainInput = new CaptainInput();
         MovementInput();
         captainInput.Player.Jump.performed += Jump_performed;
@@ -75,8 +75,6 @@ public class PlayerControl : MonoBehaviour
         {
             playerAnim.ResetTrigger(State.Falling.ToString());
             playerAnim.SetBool("onGround", true);
-                jumpTimes = 0;
-            
         }
         if (playerRB.velocity.y < 0)
         {
@@ -95,6 +93,11 @@ public class PlayerControl : MonoBehaviour
             Vector2 jumper = new Vector2(playerRB.velocity.x, minJump + varJump * timeHoldJump);
             playerRB.velocity = jumper;
             playerAnim.SetBool("onGround", false);
+        }
+        if (playerFeet.IsTouchingLayers(LayerMask.GetMask("Ground")) && playerRB.velocity.y <= 0)
+        {
+            Debug.Log("on ground");
+            jumpTimes = 0;
         }
     }
     #region Move

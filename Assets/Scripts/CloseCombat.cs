@@ -7,7 +7,7 @@ public class CloseCombat : MonoBehaviour
 {
     [Header("Attack")]
     [SerializeField] Transform attackPoint;
-    [SerializeField] GameObject throwPrefabs;
+    
     Rigidbody2D playerRB;
     Animator playerAnim;
     [SerializeField] float throwDelay;
@@ -60,7 +60,17 @@ public class CloseCombat : MonoBehaviour
     {
         if (!canThrow) return;
         Coroutine throwDelay = StartCoroutine(ThrowDelay());
-        Instantiate(throwPrefabs, attackPoint.position, Quaternion.identity);
+        GameObject throwPrefabs = Pool.swordPool.GetPooledSwords();
+        Debug.Log("Press");
+
+        if (throwPrefabs != null)
+        {
+            Debug.Log("Press 2");
+
+            throwPrefabs.transform.position = Vector2.zero;
+            throwPrefabs.transform.rotation = Quaternion.identity;            
+            throwPrefabs.SetActive(true);
+        }
     }
 
     IEnumerator AttackDelay()
