@@ -27,6 +27,7 @@ public class CloseCombat : MonoBehaviour
         if(!canReceiveInput) { return; }
         if (obj.performed)
         {
+            PlayerControl.currentState = PlayerControl.State.Attacking.ToString();
             immobilizeMovement = true;
             canReceiveInput = false;
             int[] atk = new int[] { 1, 2, 3 };
@@ -61,13 +62,11 @@ public class CloseCombat : MonoBehaviour
         if (!canThrow) return;
         Coroutine throwDelay = StartCoroutine(ThrowDelay());
         GameObject throwPrefabs = Pool.swordPool.GetPooledSwords();
-        Debug.Log("Press");
-
         if (throwPrefabs != null)
         {
             Debug.Log("Press 2");
 
-            throwPrefabs.transform.position = Vector2.zero;
+            throwPrefabs.transform.position = attackPoint.position;
             throwPrefabs.transform.rotation = Quaternion.identity;            
             throwPrefabs.SetActive(true);
         }

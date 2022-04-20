@@ -10,7 +10,6 @@ public class PlayerControl : MonoBehaviour
     [SerializeField] float moveSpeed;
     [SerializeField] float minJump, varJump;
     [SerializeField] int numberOfJumps = 1;
-    [SerializeField] State state = State.Idling;
     CaptainInput captainInput;
     Vector2 moveInput;
     bool jumpButtonHold;
@@ -22,8 +21,17 @@ public class PlayerControl : MonoBehaviour
     [SerializeField] Rigidbody2D playerRB;
     [HideInInspector]
     [SerializeField] BoxCollider2D playerFeet;
-    [HideInInspector]
-    [SerializeField] Animator playerAnim;
+    public static string currentState;
+    bool running, jumping, attacking;
+    public enum State
+    {
+        Idling,
+        Running,
+        Jumping,
+        Falling,
+        Attacking,
+        Count
+    }
 
     private void Awake()
     {   
@@ -31,12 +39,13 @@ public class PlayerControl : MonoBehaviour
         MovementInput();
         captainInput.Player.Jump.performed += Jump_performed;
         captainInput.Player.Jump.canceled += Jump_canceled;
-        
+        currentState = State.Idling.ToString();
     }
-
+    #region Jump Input
     private void Jump_canceled(InputAction.CallbackContext obj)
     {
         jumpButtonHold = false;
+        jumping = false;
     }
 
     private void Jump_performed(InputAction.CallbackContext obj)
@@ -44,13 +53,13 @@ public class PlayerControl : MonoBehaviour
         jumpTimes++;
         if (jumpTimes <= numberOfJumps)
         {
-            jumpButtonHold = true;
-            playerAnim.SetBool(State.Jumping.ToString(), true);
+            jumping = true;
+            jumpButtonHold = true;            
             timeHoldJump = 0f;
         }
     }
+    #endregion
 
-    
     #region Enable and Disable input
     private void OnEnable()
     {
@@ -66,41 +75,26 @@ public class PlayerControl : MonoBehaviour
     {
         Move();
         Jump();
-        AnimationControl();
+        ChangeState();
     }
 
-    private void AnimationControl()
-    {
-        if (playerFeet.IsTouchingLayers(LayerMask.GetMask("Ground")))
-        {
-            playerAnim.ResetTrigger(State.Falling.ToString());
-            playerAnim.SetBool("onGround", true);
-        }
-        if (playerRB.velocity.y < 0)
-        {
-            playerAnim.SetTrigger(State.Falling.ToString());
-            playerAnim.SetBool(State.Jumping.ToString(), false);
-        }
-    }
+    
 
     private void Jump()
     {
         if (jumpButtonHold && timeHoldJump < maxHoldTime)
         {
-            playerAnim.ResetTrigger(State.Falling.ToString());
             timeHoldJump = Mathf.Clamp(timeHoldJump, 0, maxHoldTime);
             timeHoldJump += Time.fixedDeltaTime;
             Vector2 jumper = new Vector2(playerRB.velocity.x, minJump + varJump * timeHoldJump);
             playerRB.velocity = jumper;
-            playerAnim.SetBool("onGround", false);
         }
         if (playerFeet.IsTouchingLayers(LayerMask.GetMask("Ground")) && playerRB.velocity.y <= 0)
         {
-            Debug.Log("on ground");
             jumpTimes = 0;
         }
     }
-    #region Move
+    #region Move Methods
     private void MovementInput()
     {
         captainInput.Player.Move.performed += context => moveInput = context.ReadValue<Vector2>();
@@ -111,21 +105,45 @@ public class PlayerControl : MonoBehaviour
     {
         Vector2 playerVelocity = new Vector2(moveInput.x * moveSpeed, playerRB.velocity.y);
         playerRB.velocity = playerVelocity;
-        bool playerHasHorizontalMovement = Mathf.Abs(playerRB.velocity.x) > Mathf.Epsilon;
-        playerAnim.SetBool(State.Running.ToString(), playerHasHorizontalMovement);
-        if (playerHasHorizontalMovement)
+        running = Mathf.Abs(playerRB.velocity.x) > Mathf.Epsilon;                
+        if (running)
         {
             transform.localScale = new Vector3(Mathf.Sign(playerRB.velocity.x), transform.localScale.y, transform.localScale.z);
+            
+        }
+        else
+        {
+            if (playerFeet.IsTouchingLayers(LayerMask.GetMask("Ground")))
+            {
+                currentState = State.Idling.ToString();
+            }
         }
     }
     #endregion
-
-    public enum State
+    void ChangeState()
     {
-        Idling,
-        Running,
-        Jumping,
-        Falling,
-        Attacking,
+        if (running)
+        {
+            currentState = State.Running.ToString();
+            CameraMovement.cameraMovement.CameraOnRunning();
+        }
+        if (jumping)
+        {
+            currentState = State.Jumping.ToString();
+        }
+        if (playerRB.velocity.y < 0 && !jumping)
+        {
+            currentState = State.Falling.ToString();
+        }
+        if (!running && playerFeet.IsTouchingLayers(LayerMask.GetMask("Ground")))
+        {
+            currentState = State.Idling.ToString();
+            CameraMovement.cameraMovement.CameraOnIdling();
+        }
+        if (attacking)
+        {
+            currentState = State.Attacking.ToString();
+        }
     }
+
 }

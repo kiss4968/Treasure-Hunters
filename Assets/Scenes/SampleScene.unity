@@ -273,6 +273,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 1248135057}
   mainCamera: {fileID: 519420031}
+  size: 0
+  minCamSize: 5
+  maxCamSize: 7
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -375,91 +378,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &1050052320
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 3809429757921108577, guid: 71854ab0314ed57479ec99df118bf6e9, type: 3}
-      propertyPath: m_RootOrder
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 3809429757921108577, guid: 71854ab0314ed57479ec99df118bf6e9, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 3.33
-      objectReference: {fileID: 0}
-    - target: {fileID: 3809429757921108577, guid: 71854ab0314ed57479ec99df118bf6e9, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3809429757921108577, guid: 71854ab0314ed57479ec99df118bf6e9, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3809429757921108577, guid: 71854ab0314ed57479ec99df118bf6e9, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3809429757921108577, guid: 71854ab0314ed57479ec99df118bf6e9, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3809429757921108577, guid: 71854ab0314ed57479ec99df118bf6e9, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3809429757921108577, guid: 71854ab0314ed57479ec99df118bf6e9, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3809429757921108577, guid: 71854ab0314ed57479ec99df118bf6e9, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3809429757921108577, guid: 71854ab0314ed57479ec99df118bf6e9, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3809429757921108577, guid: 71854ab0314ed57479ec99df118bf6e9, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3809429757921108578, guid: 71854ab0314ed57479ec99df118bf6e9, type: 3}
-      propertyPath: m_Size.x
-      value: 1.4984565
-      objectReference: {fileID: 0}
-    - target: {fileID: 3809429757921108578, guid: 71854ab0314ed57479ec99df118bf6e9, type: 3}
-      propertyPath: m_Size.y
-      value: 2.6358066
-      objectReference: {fileID: 0}
-    - target: {fileID: 3809429757921108578, guid: 71854ab0314ed57479ec99df118bf6e9, type: 3}
-      propertyPath: m_Offset.x
-      value: -0.1715281
-      objectReference: {fileID: 0}
-    - target: {fileID: 3809429757921108578, guid: 71854ab0314ed57479ec99df118bf6e9, type: 3}
-      propertyPath: m_Offset.y
-      value: 0.073634624
-      objectReference: {fileID: 0}
-    - target: {fileID: 3809429757921108579, guid: 71854ab0314ed57479ec99df118bf6e9, type: 3}
-      propertyPath: m_Simulated
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3809429757921108579, guid: 71854ab0314ed57479ec99df118bf6e9, type: 3}
-      propertyPath: m_CollisionDetection
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3809429757921108579, guid: 71854ab0314ed57479ec99df118bf6e9, type: 3}
-      propertyPath: m_UseFullKinematicContacts
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3809429757921108604, guid: 71854ab0314ed57479ec99df118bf6e9, type: 3}
-      propertyPath: m_Name
-      value: FlyingSword
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 71854ab0314ed57479ec99df118bf6e9, type: 3}
 --- !u!1 &1248135057
 GameObject:
   m_ObjectHideFlags: 0
@@ -747,11 +665,9 @@ MonoBehaviour:
   minJump: 10
   varJump: 1
   numberOfJumps: 2
-  state: 0
   jumpTimes: 0
   playerRB: {fileID: 1248135060}
   playerFeet: {fileID: 1248135062}
-  playerAnim: {fileID: 1554456173}
 --- !u!114 &1248135065
 MonoBehaviour:
   m_ObjectHideFlags: 0
