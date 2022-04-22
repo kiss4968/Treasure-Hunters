@@ -16,19 +16,18 @@ public class AnimationController : MonoBehaviour
 
     public void ChangeAnim()
     {
-        for (int i = 0; i < (int)PlayerControl.State.Count; i++)
-        {
-            string temp = ((PlayerControl.State)i).ToString();
-            if (((PlayerControl.State)i).ToString() == PlayerControl.currentState)
+            for (int i = 0; i < (int)PlayerControl.State.Count; i++)
             {
-                playerAnim.SetBool(((PlayerControl.State)i).ToString(), true);
+                string temp = ((PlayerControl.State)i).ToString();
+                if (((PlayerControl.State)i).ToString() == PlayerControl.currentState)
+                {
+                    playerAnim.SetBool(((PlayerControl.State)i).ToString(), true);
+                }
+                else
+                {
+                    playerAnim.SetBool(((PlayerControl.State)i).ToString(), false);
+                }
             }
-            else
-            {
-                playerAnim.SetBool(((PlayerControl.State)i).ToString(), false);
-            }
-        }
+        
     }
-
-    
 }

@@ -15,6 +15,7 @@ public class CloseCombat : MonoBehaviour
     [SerializeField] bool canReceiveInput = true;
     float attackDelay = 0.5f;
     bool immobilizeMovement;
+    public static bool isAttacking;
 
     private void Awake()
     {
@@ -30,7 +31,7 @@ public class CloseCombat : MonoBehaviour
             PlayerControl.currentState = PlayerControl.State.Attacking.ToString();
             immobilizeMovement = true;
             canReceiveInput = false;
-            int[] atk = new int[] { 1, 2, 3 };
+            isAttacking = true;
             int ran = Random.Range(1, 4);
             switch (ran)
             {
@@ -48,14 +49,15 @@ public class CloseCombat : MonoBehaviour
         }
         if (obj.canceled)
         {
-            playerAnim.SetBool("isAttacking", false);
+            playerAnim.SetBool("Attacking", false);
             immobilizeMovement = false;
+            isAttacking = false;
         }
     }
 
     private void FixedUpdate()
     {
-        ImmobilizeMovement();
+        //ImmobilizeMovement();
     }
     public void Throw(InputAction.CallbackContext obj)
     {
@@ -87,18 +89,18 @@ public class CloseCombat : MonoBehaviour
 
     public void PerformAttack1()
     {
-        playerAnim.SetBool("isAttacking",true);
+        playerAnim.SetBool("Attacking",true);
         playerAnim.SetFloat("Speed", 0f);
     }
 
     public void PerformAttack2()
     {
-        playerAnim.SetBool("isAttacking", true);
+        playerAnim.SetBool("Attacking", true);
         playerAnim.SetFloat("Speed", 1f);
     }
     public void PerformAttack3()
     {
-        playerAnim.SetBool("isAttacking", true);
+        playerAnim.SetBool("Attacking", true);
         playerAnim.SetFloat("Speed", 2f);
     }
     void ImmobilizeMovement()

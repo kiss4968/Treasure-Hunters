@@ -18,7 +18,7 @@ public class FlyingSword : MonoBehaviour
 
     private void Update()
     {
-        transform.Translate(new Vector3(flySpeed * Time.deltaTime, 0, 0));
+        
     }
 
     
