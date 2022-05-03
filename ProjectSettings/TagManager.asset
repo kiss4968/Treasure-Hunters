@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Ground
+  - Projectile
+  - Cannon Ball
+  - Totem
   layers:
   - Default
   - TransparentFX
@@ -12,11 +15,11 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Terrain
+  - Enemy
+  - Enemy Offspring
+  - Chest
+  - Chest Offspring
   - 
   - 
   - 
