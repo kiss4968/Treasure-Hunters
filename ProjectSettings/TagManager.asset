@@ -20,7 +20,7 @@ TagManager:
   - Enemy Offspring
   - Chest
   - Chest Offspring
-  - 
+  - Collectible
   - 
   - 
   - 
@@ -44,4 +44,25 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 4061938171
+    locked: 0
+  - name: Decoration
+    uniqueID: 2934618103
+    locked: 0
+  - name: Chest
+    uniqueID: 2982468043
+    locked: 0
+  - name: Enemy
+    uniqueID: 1298574903
+    locked: 0
+  - name: Player
+    uniqueID: 342437393
+    locked: 0
+  - name: Collectible
+    uniqueID: 3412796273
+    locked: 0
+  - name: Terrain
+    uniqueID: 1913242627
     locked: 0

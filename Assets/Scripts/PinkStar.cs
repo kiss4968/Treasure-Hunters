@@ -75,6 +75,7 @@ public class PinkStar : MonoBehaviour
         hp -= damage;
         if (hp > 0) animator.SetInteger("stateIndex", 8);
         else animator.SetInteger("stateIndex", 9);
+        rigi.velocity = new Vector2(0, 0);
         rigi.AddForce(new Vector2(100, 100));
     }
 

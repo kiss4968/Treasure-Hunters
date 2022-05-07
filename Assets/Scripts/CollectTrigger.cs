@@ -15,16 +15,18 @@ public class CollectTrigger : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            Collected();
-        }
-            
+
+    }
+    void OnMouseDown()
+    {
+        Collected();
     }
 
     void Collected()
     {
         anim.SetTrigger("collected");
-        Destroy(gameObject, this.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length);
+        //Destroy(gameObject, this.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length);
     }
+
+
 }

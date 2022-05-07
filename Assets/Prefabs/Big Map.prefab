@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 9072123429155388417}
   - component: {fileID: 9072123429155388416}
   - component: {fileID: 9072123429155388423}
-  m_Layer: 0
-  m_Name: BigMap
+  m_Layer: 11
+  m_Name: Big Map
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

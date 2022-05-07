@@ -25,4 +25,9 @@ public class Deactive : MonoBehaviour
     {
         this.transform.parent.gameObject.SetActive(false);
     }
+
+    void ManualDestroy()
+    {
+        Destroy(this.gameObject);
+    }
 }

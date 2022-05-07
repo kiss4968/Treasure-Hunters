@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6535345702847581955}
   - component: {fileID: 6535345702847581964}
   - component: {fileID: -7507820777206212108}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Wood Spike
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -71,8 +71,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1298574903
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: f49bb5b48d75dfb40948cc153238054d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

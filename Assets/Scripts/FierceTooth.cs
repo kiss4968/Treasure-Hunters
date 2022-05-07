@@ -18,6 +18,8 @@ public class FierceTooth : MonoBehaviour
     [SerializeField] GameObject attackEffectLeft;
     [SerializeField] GameObject attackEffectRight;
     [SerializeField] GameObject dustFall;
+
+    
     // Start is called before the first frame update
     void Start()
     {
